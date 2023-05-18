@@ -1,0 +1,12 @@
+{
+  "sepolia": {
+    "Marketplace": {
+      "address": "0x535e0cF7d0533013343C68c7Dc93E841f3ccd7E2",
+      "startBlock": 3490187
+    },
+    "CreatureAccessory": {
+      "address": "0x9EC41A36e3913Bc05B8C820ae4f7C54b255d8A1A",
+      "startBlock": 3490187
+    }
+  }
+}

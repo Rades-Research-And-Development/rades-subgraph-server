@@ -1,0 +1,92 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Marketplace
+    network: sepolia
+    source:
+      address: "0x535e0cF7d0533013343C68c7Dc93E841f3ccd7E2"
+      abi: Marketplace
+      startBlock: 3490187
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AuctionCancelled
+        - BalanceUpdated
+        - BidPlaced
+        - ClaimAuctionNFT
+        - ClaimFunds
+        - ClaimSaleNFTs
+        - NewAuction
+        - OwnershipTransferred
+        - Purchase
+        - SaleCancelled
+        - SaleCreated
+      abis:
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: AuctionCancelled(indexed uint256)
+          handler: handleAuctionCancelled
+        - event: BalanceUpdated(indexed address,indexed address,indexed uint256)
+          handler: handleBalanceUpdated
+        - event: BidPlaced(indexed uint256,uint256)
+          handler: handleBidPlaced
+        - event: ClaimAuctionNFT(indexed uint256,indexed address,indexed address,uint256)
+          handler: handleClaimAuctionNFT
+        - event: ClaimFunds(indexed address,indexed address,indexed uint256)
+          handler: handleClaimFunds
+        - event: ClaimSaleNFTs(indexed uint256,indexed address,indexed uint256)
+          handler: handleClaimSaleNFTs
+        - event: NewAuction(indexed
+            uint256,(uint128,uint128,bool,address,address,address,uint256,uint256,uint256))
+          handler: handleNewAuction
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Purchase(indexed uint256,indexed address,indexed address)
+          handler: handlePurchase
+        - event: SaleCancelled(indexed uint256)
+          handler: handleSaleCancelled
+        - event: SaleCreated(indexed uint256,indexed address,indexed uint256)
+          handler: handleSaleCreated
+      file: ./src/marketplace.ts
+  - kind: ethereum
+    name: CreatureAccessory
+    network: sepolia
+    source:
+      address: "0x9EC41A36e3913Bc05B8C820ae4f7C54b255d8A1A"
+      abi: CreatureAccessory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ApprovalForAll
+        - CreatureAccessoryOwnershipTransferred
+        - Paused
+        - TransferBatch
+        - TransferSingle
+        - URI
+        - Unpaused
+      abis:
+        - name: CreatureAccessory
+          file: ./abis/CreatureAccessory.json
+      eventHandlers:
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/creature-accessory.ts
