@@ -1,3 +1,4 @@
+import { Address, BigInt, ByteArray, Bytes, ethereum } from "@graphprotocol/graph-ts"
 import {
   AuctionCancelled as AuctionCancelledEvent,
   BalanceUpdated as BalanceUpdatedEvent,
@@ -5,6 +6,8 @@ import {
   ClaimAuctionNFT as ClaimAuctionNFTEvent,
   ClaimFunds as ClaimFundsEvent,
   ClaimSaleNFTs as ClaimSaleNFTsEvent,
+  Marketplace,
+  Marketplace__salesResult,
   NewAuction as NewAuctionEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
   Purchase as PurchaseEvent,
@@ -24,6 +27,7 @@ import {
   SaleCancelled,
   SaleCreated
 } from "../generated/schema"
+import { fetchAmount, fetchSale } from "./helper/marketplace-helper"
 
 export function handleAuctionCancelled(event: AuctionCancelledEvent): void {
   let entity = new AuctionCancelled(
@@ -105,7 +109,6 @@ export function handleClaimSaleNFTs(event: ClaimSaleNFTsEvent): void {
   entity.Marketplace_id = event.params.id
   entity.owner = event.params.owner
   entity.amount = event.params.amount
-
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
@@ -158,6 +161,14 @@ export function handlePurchase(event: PurchaseEvent): void {
   entity.saleId = event.params.saleId
   entity.purchaser = event.params.purchaser
   entity.recipient = event.params.recipient
+  let saleId = event.params.saleId;
+  let saleIdBytes = Bytes.fromBigInt(saleId);
+
+  let sale = SaleCreated.load(Bytes.fromByteArray(saleIdBytes));
+  if (sale !== null) {
+    sale.status = false;
+    sale.save();
+  }
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -180,16 +191,31 @@ export function handleSaleCancelled(event: SaleCancelledEvent): void {
 }
 
 export function handleSaleCreated(event: SaleCreatedEvent): void {
-  let entity = new SaleCreated(
+  let sale = new SaleCreated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.Marketplace_id = event.params.id
-  entity.nftAddress = event.params.nftAddress
-  entity.nftID = event.params.nftID
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  // const saleDetail = marketplaceContract.try_sales(event.params.id)
+  // const saleDetail = marketplaceContract.owner()
+  sale.Marketplace_id = event.params.id
+  sale.nftAddress = event.params.nftAddress
+  sale.nftID = event.params.nftID
+  sale.status = true
+  sale.seller = event.transaction.from
+  const sale_: Marketplace__salesResult | null = fetchSale(event.params.id);
+  if (sale_) {
+    sale.amount = sale_.getAmount()
+    sale.price = sale_.getPrice()
+    sale.isERC721 = sale_.getIsERC721()
+    sale.currency = sale_.getCurrency()
+  }
+  // sale.price = saleDetail.value.getPrice()
+  // sale.isERC721 = saleDetail.value.getIsERC721()
+  // sale.currency = marketplaceContract.try_saleIdCounter()
 
-  entity.save()
+  sale.blockNumber = event.block.number
+  sale.blockTimestamp = event.block.timestamp
+  sale.transactionHash = event.transaction.hash
+
+  sale.save()
 }

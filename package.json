@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node http://13.251.105.183:8020/ --ipfs http://13.251.105.183:5001 athevinha/rades",
+    "deploy": "graph deploy --node http://13.212.19.225:8020/ --ipfs http://13.212.19.225:5001 athevinh/rades",
     "create-local": "graph create --node http://localhost:8020/ athevinha/rades",
     "remove-local": "graph remove --node http://localhost:8020/ athevinha/rades",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 athevinha/rades",
@@ -14,5 +14,7 @@
     "@graphprotocol/graph-cli": "0.49.0",
     "@graphprotocol/graph-ts": "0.29.1"
   },
-  "devDependencies": { "matchstick-as": "0.5.0" }
+  "devDependencies": {
+    "matchstick-as": "0.5.0"
+  }
 }

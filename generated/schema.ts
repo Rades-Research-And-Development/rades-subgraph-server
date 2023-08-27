@@ -1311,6 +1311,96 @@ export class SaleCreated extends Entity {
     this.set("Marketplace_id", Value.fromBigInt(value));
   }
 
+  get seller(): Bytes {
+    let value = this.get("seller");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set seller(value: Bytes) {
+    this.set("seller", Value.fromBytes(value));
+  }
+
+  get amount(): BigInt | null {
+    let value = this.get("amount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set amount(value: BigInt | null) {
+    if (!value) {
+      this.unset("amount");
+    } else {
+      this.set("amount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get price(): BigInt | null {
+    let value = this.get("price");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set price(value: BigInt | null) {
+    if (!value) {
+      this.unset("price");
+    } else {
+      this.set("price", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get isERC721(): boolean {
+    let value = this.get("isERC721");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isERC721(value: boolean) {
+    this.set("isERC721", Value.fromBoolean(value));
+  }
+
+  get currency(): Bytes | null {
+    let value = this.get("currency");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set currency(value: Bytes | null) {
+    if (!value) {
+      this.unset("currency");
+    } else {
+      this.set("currency", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get status(): boolean {
+    let value = this.get("status");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set status(value: boolean) {
+    this.set("status", Value.fromBoolean(value));
+  }
+
   get nftAddress(): Bytes {
     let value = this.get("nftAddress");
     if (!value || value.kind == ValueKind.NULL) {
@@ -1966,6 +2056,23 @@ export class TransferSingle extends Entity {
 
   set value(value: BigInt) {
     this.set("value", Value.fromBigInt(value));
+  }
+
+  get balance(): BigInt | null {
+    let value = this.get("balance");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set balance(value: BigInt | null) {
+    if (!value) {
+      this.unset("balance");
+    } else {
+      this.set("balance", Value.fromBigInt(<BigInt>value));
+    }
   }
 
   get blockNumber(): BigInt {

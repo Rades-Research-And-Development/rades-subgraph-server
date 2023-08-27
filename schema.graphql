@@ -103,12 +103,20 @@ type SaleCancelled @entity(immutable: true) {
 type SaleCreated @entity(immutable: true) {
   id: Bytes!
   Marketplace_id: BigInt! # uint256
+  seller: Bytes! #address
+
+  amount: BigInt
+  price: BigInt
+  isERC721: Boolean
+  currency: Bytes
+  status: Boolean
   nftAddress: Bytes! # address
   nftID: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
 type ApprovalForAll @entity(immutable: true) {
   id: Bytes!
   account: Bytes! # address
@@ -155,6 +163,7 @@ type TransferSingle @entity(immutable: true) {
   to: Bytes! # address
   CreatureAccessory_id: BigInt! # uint256
   value: BigInt! # uint256
+  balance: BigInt
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

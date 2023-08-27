@@ -16,6 +16,7 @@ import {
   URI,
   Unpaused
 } from "../generated/schema"
+import { fetchBalanceOf } from "./helper/creature-accessory-helper"
 
 export function handleApprovalForAll(event: ApprovalForAllEvent): void {
   let entity = new ApprovalForAll(
@@ -77,7 +78,6 @@ export function handleTransferBatch(event: TransferBatchEvent): void {
 
   entity.save()
 }
-
 export function handleTransferSingle(event: TransferSingleEvent): void {
   let entity = new TransferSingle(
     event.transaction.hash.concatI32(event.logIndex.toI32())
@@ -87,6 +87,7 @@ export function handleTransferSingle(event: TransferSingleEvent): void {
   entity.to = event.params.to
   entity.CreatureAccessory_id = event.params.id
   entity.value = event.params.value
+  entity.balance = fetchBalanceOf(event.params.to, event.params.id)
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
